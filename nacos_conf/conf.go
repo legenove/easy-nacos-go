@@ -101,7 +101,8 @@ type NacosConfig struct {
 	HasVal        bool                   // 是否有值
 	Val           interface{}            // 配置的格式化的值
 	md5Ver        string                 // 版本
-	OnChange      chan struct{}          // 变更通知
+	onChange      chan struct{}          // 变更通知
+	onRemove      chan struct{}          // 变更通知
 	OnChangeFunc  ifacer.ChangeFunc      // 改变 func
 	OnRemoveFunc  ifacer.ChangeFunc      // 删除 func
 	readingConfig bool                   // 是否正在读配置
@@ -117,7 +118,8 @@ type NacosConfig struct {
 func NewNacosConfig(manager *NacosConfManage, dataId string) *NacosConfig {
 	return &NacosConfig{
 		BaseConf:     manager,
-		OnChange:     make(chan struct{}, 8),
+		onChange:     make(chan struct{}, 8),
+		onRemove:     make(chan struct{}, 8),
 		dataId:       dataId,
 		dataIdPrefix: manager.DataIdPrefix,
 		group:        manager.Group,
@@ -397,7 +399,11 @@ func (n *NacosConfig) find(lcaseKey string, flagDefault bool) interface{} {
 }
 
 func (n *NacosConfig) OnChangeChan() <-chan struct{} {
-	return n.OnChange
+	return n.onChange
+}
+
+func (n *NacosConfig) OnRemoveChan() <-chan struct{} {
+	return n.onRemove
 }
 
 // searchMapWithPathPrefixes recursively searches for a value for path in source map.
@@ -500,9 +506,9 @@ func DefaultOnChangeFunc(iv ifacer.Configer) {
 	}
 	go func() {
 		// 防止无人使用 onchange channel
-		if len(v.OnChange) == 0 {
+		if len(v.onChange) == 0 {
 			select {
-			case v.OnChange <- struct{}{}:
+			case v.onChange <- struct{}{}:
 			case <-time.After(time.Millisecond):
 			}
 		}
