@@ -84,6 +84,7 @@ func (n *NacosConfManage) Instance(dataId, _type string, val interface{}, opts .
 	n.mapper[mapperCacheKey(v.group, v.GetFullName())] = v
 	return v, nil
 }
+
 func mapperCacheKey(group, fullName string) string {
 	return utils.ConcatenateStrings(fullName, "@", group)
 }
@@ -393,6 +394,10 @@ func (n *NacosConfig) find(lcaseKey string, flagDefault bool) interface{} {
 		return val
 	}
 	return nil
+}
+
+func (n *NacosConfig) OnChangeChan() <-chan struct{} {
+	return n.OnChange
 }
 
 // searchMapWithPathPrefixes recursively searches for a value for path in source map.

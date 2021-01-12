@@ -41,8 +41,8 @@ github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORN
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0 h1:45sCR5RtlFHMR4UwH9sdQ5TC8v0qDQCHnXt+kaKSTVE=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
-github.com/legenove/easyconfig v0.0.0-20201230110116-998dd44b251f h1:U7CPSKB8Hhkmb0EUOoSYjdQjSfcv5NryYvnosp8wIQ4=
-github.com/legenove/easyconfig v0.0.0-20201230110116-998dd44b251f/go.mod h1:EiY0JhEo2/B9UzOx5qKkSnJJxusz4JM6tvvGARo3E34=
+github.com/legenove/easyconfig v0.0.0-20210112092609-8e5d87ec7b8c h1:5eGBnthFbmW+PYPsG33zCY1ue/wJC7+Y0xfi5BX9+c4=
+github.com/legenove/easyconfig v0.0.0-20210112092609-8e5d87ec7b8c/go.mod h1:EiY0JhEo2/B9UzOx5qKkSnJJxusz4JM6tvvGARo3E34=
 github.com/legenove/utils v0.0.0-20200903023119-a6d42e758182 h1:BDZDEguO5i18HKMWvBSDxRHP0kslKNnzjXKedFh08Rs=
 github.com/legenove/utils v0.0.0-20200903023119-a6d42e758182/go.mod h1:LU8q6GHxhwMIOe1AEPSASOIEoFla2d7ejICp8bVYuqs=
 github.com/lestrrat/go-envload v0.0.0-20180220120943-6ed08b54a570 h1:0iQektZGS248WXmGIYOwRXSQhD4qn3icjMpuxwO7qlo=
