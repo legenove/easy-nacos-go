@@ -93,6 +93,7 @@ type NacosConfig struct {
 	ConfLock      sync.Mutex             // 设置配置的锁
 	ValLock       sync.Mutex             // 格式化值的锁
 	LoadLock      sync.Mutex             // 读配置的锁
+	dataIdPrefix  string                 // data prefix
 	dataId        string                 // dataId
 	group         string                 // 组名
 	Type          string                 // 文件类型
@@ -117,6 +118,7 @@ func NewNacosConfig(manager *NacosConfManage, dataId string) *NacosConfig {
 		BaseConf:     manager,
 		OnChange:     make(chan struct{}, 8),
 		dataId:       dataId,
+		dataIdPrefix: manager.DataIdPrefix,
 		group:        manager.Group,
 		keyDelim:     ".",
 		OnChangeFunc: DefaultOnChangeFunc,
@@ -137,8 +139,8 @@ func (n *NacosConfig) GetName() string {
 }
 
 func (n *NacosConfig) GetFullName() string {
-	if len(n.BaseConf.DataIdPrefix) != 0 {
-		return utils.ConcatenateStrings(n.BaseConf.DataIdPrefix, n.dataId)
+	if len(n.dataIdPrefix) != 0 {
+		return utils.ConcatenateStrings(n.dataIdPrefix, n.dataId)
 	}
 	return n.dataId
 }

@@ -1,10 +1,12 @@
 package nacos_conf
 
 import (
+	"fmt"
 	"github.com/nacos-group/nacos-sdk-go/clients"
 	"github.com/nacos-group/nacos-sdk-go/common/constant"
 	"sync"
 	"testing"
+	"time"
 )
 
 func TestNacosConfig_AllKeys(t *testing.T) {
@@ -41,7 +43,9 @@ func TestNewConfManage(t *testing.T) {
 	_, _ = cm.Instance("app.yaml", "yaml", nil)
 	wg := sync.WaitGroup{}
 
-	_, _ = cm.Instance("app1.yaml", "yaml", nil)
+	a, _ := cm.Instance("app1.yaml", "yaml", nil)
+	time.Sleep(time.Second * 5)
+	fmt.Println(a.Get("abc"))
 	wg.Add(1)
 	wg.Wait()
 }
