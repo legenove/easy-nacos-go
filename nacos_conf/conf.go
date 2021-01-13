@@ -1,7 +1,6 @@
 package nacos_conf
 
 import (
-	"fmt"
 	"strings"
 	"sync"
 	"time"
@@ -44,14 +43,12 @@ func (n *NacosConfManage) OnchangeFunc(namespace, group, dataId, data string) {
 	}
 	if len(data) > 0 {
 		err := nv.setChange(data)
-		if nv.OnChangeFunc != nil && err == nil {
+		if  err == nil {
 			nv.OnChangeFunc(nv)
 		}
 	} else {
 		nv.setRemove()
-		if nv.OnRemoveFunc != nil {
-			nv.OnRemoveFunc(nv)
-		}
+		nv.OnRemoveFunc(nv)
 	}
 }
 
@@ -77,7 +74,6 @@ func (n *NacosConfManage) Instance(dataId, _type string, val interface{}, opts .
 		OnChange: n.OnchangeFunc,
 	})
 	if err != nil {
-		fmt.Println(err)
 		return nil, err
 	}
 	v.Val = val
@@ -103,8 +99,8 @@ type NacosConfig struct {
 	md5Ver        string                 // 版本
 	onChange      chan struct{}          // 变更通知
 	onRemove      chan struct{}          // 变更通知
-	OnChangeFunc  ifacer.ChangeFunc      // 改变 func
-	OnRemoveFunc  ifacer.ChangeFunc      // 删除 func
+	onChangeFunc  ifacer.ChangeFunc      // 改变 func
+	onRemoveFunc  ifacer.ChangeFunc      // 删除 func
 	readingConfig bool                   // 是否正在读配置
 	config        map[string]interface{} // 缓存的格式化配置
 	keyDelim      string                 // key分隔符
@@ -124,8 +120,6 @@ func NewNacosConfig(manager *NacosConfManage, dataId string) *NacosConfig {
 		dataIdPrefix: manager.DataIdPrefix,
 		group:        manager.Group,
 		keyDelim:     ".",
-		OnChangeFunc: DefaultOnChangeFunc,
-		OnRemoveFunc: DefaultOnRemoveFunc,
 	}
 }
 
@@ -173,6 +167,20 @@ func (n *NacosConfig) readConfNoLock() error {
 	return err
 }
 
+func (n *NacosConfig) OnChangeFunc(configer ifacer.Configer) {
+	if n.onChangeFunc != nil {
+		n.onChangeFunc(configer)
+	}
+	DefaultOnChangeFunc(configer)
+}
+
+func (n *NacosConfig) OnRemoveFunc(configer ifacer.Configer) {
+	if n.onRemoveFunc != nil {
+		n.onRemoveFunc(configer)
+	}
+	DefaultOnRemoveFunc(configer)
+}
+
 func (n *NacosConfig) GetConf() error {
 	if len(n.keyDelim) == 0 {
 		n.keyDelim = "."
@@ -210,12 +218,13 @@ func (n *NacosConfig) setChange(content string) error {
 	if err == nil {
 		n.setConfig(md5Ver, config)
 	}
-	fmt.Println(111, config)
 	return err
 }
 
 func (n *NacosConfig) setRemove() {
-	n.setConfig("", map[string]interface{}{})
+	n.ConfLock.Lock()
+	defer n.ConfLock.Unlock()
+	n.md5Ver = ""
 }
 
 func (n *NacosConfig) sameVersion(md5 string) bool {
@@ -293,13 +302,12 @@ func (n *NacosConfig) GetValue() interface{} {
 		}
 		n.LoadLock.Unlock()
 	}
-	if n.Val != nil && !n.HasVal && n.OnChangeFunc != nil {
+	if n.Val != nil && !n.HasVal {
 		n.LoadLock.Lock()
+		defer n.LoadLock.Unlock()
 		if n.Val != nil && !n.HasVal {
-			n.LoadLock.Unlock()
 			n.OnChangeFunc(n)
 		}
-		n.LoadLock.Unlock()
 	}
 	return n.Val
 }
@@ -365,11 +373,11 @@ func (n *NacosConfig) UnmarshalKey(key string, rawVal interface{}) error {
 }
 
 func (n *NacosConfig) SetOnChangeFunc(onChangeFunc ifacer.ChangeFunc) {
-	n.OnChangeFunc = onChangeFunc
+	n.onChangeFunc = onChangeFunc
 }
 
 func (n *NacosConfig) SetOnRemoveFunc(onRemoveFunc ifacer.ChangeFunc) {
-	n.OnRemoveFunc = onRemoveFunc
+	n.onRemoveFunc = onRemoveFunc
 }
 
 func (n *NacosConfig) get(key string) interface{} {
@@ -528,4 +536,13 @@ func DefaultOnRemoveFunc(iv ifacer.Configer) {
 		}
 		v.config = map[string]interface{}{}
 	}
+	go func() {
+		// 防止无人使用 onRemove channel
+		if len(v.onRemove) == 0 {
+			select {
+			case v.onRemove <- struct{}{}:
+			case <-time.After(time.Millisecond):
+			}
+		}
+	}()
 }

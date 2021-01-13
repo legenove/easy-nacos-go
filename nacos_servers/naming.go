@@ -1,6 +1,7 @@
 package nacos_servers
 
 import (
+	"github.com/legenove/easy-nacos-go/nacos_clients"
 	"github.com/legenove/utils"
 	"github.com/nacos-group/nacos-sdk-go/model"
 	"github.com/nacos-group/nacos-sdk-go/vo"
@@ -10,24 +11,27 @@ import (
 )
 
 type ServerManageParam struct {
-	NameSpace   string
-	Group       string
-	Ip          string
-	Port        uint64
-	ServerName  string
-	Weight      float64
-	Metadata    map[string]string
-	ClusterName string
-	AllClusters []string
+	NameSpace       string
+	Group           string
+	Ip              string
+	Port            uint64
+	ServerName      string
+	Weight          float64
+	Metadata        map[string]string
+	ClusterName     string
+	NacosServerName string
+	AllClusters     []string
 }
 
 type UpdateServerManageParam struct {
-	Weight   float64
-	Metadata map[string]string
+	NacosServerName string
+	Weight          float64
+	Metadata        map[string]string
 }
 
 type NacosServerManage struct {
 	sync.RWMutex
+	NacosServerName  string // nacos默认集群名字
 	NameSpace        string
 	Group            string
 	Ip               string
@@ -41,17 +45,19 @@ type NacosServerManage struct {
 }
 
 func NewNacosServerManage(client naming_client.INamingClient, param ServerManageParam) *NacosServerManage {
-	return &NacosServerManage{
-		NameSpace:    param.NameSpace,
-		Group:        param.Group,
-		Ip:           param.Ip,
-		Port:         param.Port,
-		ServerName:   param.ServerName,
-		Weight:       param.Weight,
-		Metadata:     param.Metadata,
-		ClusterName:  param.ClusterName,
-		NamingClient: map[string]naming_client.INamingClient{param.NameSpace: client},
+	nsm := &NacosServerManage{
+		NacosServerName: param.NacosServerName,
+		NameSpace:       param.NameSpace,
+		Group:           param.Group,
+		Ip:              param.Ip,
+		Port:            param.Port,
+		ServerName:      param.ServerName,
+		Weight:          param.Weight,
+		Metadata:        param.Metadata,
+		ClusterName:     param.ClusterName,
+		NamingClient:    map[string]naming_client.INamingClient{param.NameSpace: client},
 	}
+	return nsm
 }
 
 func (n *NacosServerManage) UpdateServerInfo(param UpdateServerManageParam) {
@@ -61,6 +67,9 @@ func (n *NacosServerManage) UpdateServerInfo(param UpdateServerManageParam) {
 	}
 	if len(param.Metadata) > 0 {
 		n.Metadata = param.Metadata
+	}
+	if len(param.NacosServerName) > 0 {
+		n.NacosServerName = param.NacosServerName
 	}
 	n.RegisterServer()
 }
@@ -100,6 +109,9 @@ func (n *NacosServerManage) GetNamingClient(nameSpace string) (naming_client.INa
 	n.RLock()
 	defer n.RUnlock()
 	client, ok := n.NamingClient[nameSpace]
+	if !ok && len(n.NacosServerName) > 0 {
+		client, ok = nacos_clients.GetNamingClient(n.NacosServerName, nameSpace)
+	}
 	return client, ok
 }
 
