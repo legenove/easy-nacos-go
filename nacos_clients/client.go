@@ -92,6 +92,7 @@ func (c *clients) GetConfigClient(serverName, nameSpace string) (client config_c
 
 func SetClientLogger(l logger.Logger) {
 	Clients.SetLogger(l)
+	Clients.recoverLogger()
 }
 func (c *clients) SetLogger(l logger.Logger) {
 	c.Lock()
