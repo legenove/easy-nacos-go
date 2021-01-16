@@ -41,10 +41,10 @@ github.com/kr/pretty v0.1.0/go.mod h1:dAy3ld7l9f0ibDNOQOHHMYYIIbhfbHSm3C4ZsoJORN
 github.com/kr/pty v1.1.1/go.mod h1:pFQYn66WHrOpPYNljwOMqo10TkYh1fy3cYio2l3bCsQ=
 github.com/kr/text v0.1.0 h1:45sCR5RtlFHMR4UwH9sdQ5TC8v0qDQCHnXt+kaKSTVE=
 github.com/kr/text v0.1.0/go.mod h1:4Jbv+DJW3UT/LiOwJeYQe1efqtUx/iVham/4vfdArNI=
-github.com/legenove/easyconfig v0.0.0-20210112092609-8e5d87ec7b8c h1:5eGBnthFbmW+PYPsG33zCY1ue/wJC7+Y0xfi5BX9+c4=
-github.com/legenove/easyconfig v0.0.0-20210112092609-8e5d87ec7b8c/go.mod h1:EiY0JhEo2/B9UzOx5qKkSnJJxusz4JM6tvvGARo3E34=
-github.com/legenove/utils v0.0.0-20200903023119-a6d42e758182 h1:BDZDEguO5i18HKMWvBSDxRHP0kslKNnzjXKedFh08Rs=
-github.com/legenove/utils v0.0.0-20200903023119-a6d42e758182/go.mod h1:LU8q6GHxhwMIOe1AEPSASOIEoFla2d7ejICp8bVYuqs=
+github.com/legenove/easyconfig v0.0.0-20210112101246-c9179bca23f9 h1:gVefRr/V3ebiViaMivBXAI9fhAxEYxUwdh0EyZsmtnc=
+github.com/legenove/easyconfig v0.0.0-20210112101246-c9179bca23f9/go.mod h1:EiY0JhEo2/B9UzOx5qKkSnJJxusz4JM6tvvGARo3E34=
+github.com/legenove/utils v1.0.1 h1:/LFI3udPgPd5zZ2jPD5BEUtY3wTEn7zI8B8lwqrNZk8=
+github.com/legenove/utils v1.0.1/go.mod h1:WEVvds8ztdMoAZOKCtLXSUu1wP0C8NkQvuXS1CHytFk=
 github.com/lestrrat/go-envload v0.0.0-20180220120943-6ed08b54a570 h1:0iQektZGS248WXmGIYOwRXSQhD4qn3icjMpuxwO7qlo=
 github.com/lestrrat/go-envload v0.0.0-20180220120943-6ed08b54a570/go.mod h1:BLt8L9ld7wVsvEWQbuLrUZnCMnUmLZ+CGDzKtclrTlE=
 github.com/lestrrat/go-file-rotatelogs v0.0.0-20180223000712-d3151e2a480f h1:sgUSP4zdTUZYZgAGGtN5Lxk92rK+JUFOwf+FT99EEI4=
@@ -61,8 +61,8 @@ github.com/modern-go/concurrent v0.0.0-20180306012644-bacd9c7ef1dd/go.mod h1:6dJ
 github.com/modern-go/reflect2 v0.0.0-20180701023420-4b7aa43c6742/go.mod h1:bx2lNnkwVCuqBIxFjflWJWanXIb3RllmbCylyMrvgv0=
 github.com/modern-go/reflect2 v1.0.1 h1:9f412s+6RmYXLWZSEzVVgPGK7C2PphHj5RJrvfx9AWI=
 github.com/modern-go/reflect2 v1.0.1/go.mod h1:bx2lNnkwVCuqBIxFjflWJWanXIb3RllmbCylyMrvgv0=
-github.com/nacos-group/nacos-sdk-go v1.0.3 h1:A2tCWcjuP6bSEjEfNwNnrY+9M0h13XRMDyLY+DPqHMI=
-github.com/nacos-group/nacos-sdk-go v1.0.3/go.mod h1:hlAPn3UdzlxIlSILAyOXKxjFSvDJ9oLzTJ9hLAK1KzA=
+github.com/nacos-group/nacos-sdk-go v1.0.4 h1:IK3E6+EZwibkKxKA+VNM45w9hdM20MHiaMnTGF6nRv8=
+github.com/nacos-group/nacos-sdk-go v1.0.4/go.mod h1:hlAPn3UdzlxIlSILAyOXKxjFSvDJ9oLzTJ9hLAK1KzA=
 github.com/pelletier/go-toml v1.8.1 h1:1Nf83orprkJyknT6h7zbuEGUEjcyVlCxSUGTENmNCRM=
 github.com/pelletier/go-toml v1.8.1/go.mod h1:T2/BmBdy8dvIRq1a/8aqjN41wvWlN4lrapLU/GW4pbc=
 github.com/pkg/errors v0.8.1/go.mod h1:bwawxfHBFNV+L2hUp1rHADufV3IMtnDRdf1r5NINEl0=
